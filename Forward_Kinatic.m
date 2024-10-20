@@ -12,7 +12,7 @@ function [P1,P2,P3,RPY1,RPY2,RPY3]=Forward_Kinatic(handles,theta1,theta2,theta3)
     
     %% create links matrix(Denavit-Hartenberg matrix)
     PO=[0;0;0;1];
-    [A0_1,R0_1]=Add_Link(theta1,d1,a1,alpha1);
+    [A0_1,R0_1]=Add_Link(theta1,d1,a1,alpha1)
     [A1_2,R1_2]=Add_Link(theta2,d2,a2,alpha2);
     [A2_3,R2_3]=Add_Link(theta3,d3,a3,alpha3);
     
@@ -20,6 +20,9 @@ function [P1,P2,P3,RPY1,RPY2,RPY3]=Forward_Kinatic(handles,theta1,theta2,theta3)
     P1=A0_1*PO;
     P2=A0_1*A1_2*PO;
     P3=A0_1*A1_2*A2_3*PO;
+    
+    A0_2=A0_1*A1_2;
+    A0_3=A0_1*A1_2*A2_3;
 
     RPY1=ROLL_PITCH_YAW(R0_1);
     RPY2=ROLL_PITCH_YAW(R0_1*R1_2);
@@ -52,6 +55,30 @@ function [P1,P2,P3,RPY1,RPY2,RPY3]=Forward_Kinatic(handles,theta1,theta2,theta3)
     hold(handles,'on')
     grid(handles,'on')
     
+    [X,Y,Z]=cylinder(handles,0.2);
+    surf(handles,X,Y,Z*2);
+    
+    cylin1 = A0_1(1:3,1:3) * [X(:)'; Y(:)'; Z(:)'];
+    x= reshape(cylin1(1, :), size(X)) + A0_1(1,4);
+    y = reshape(cylin1(2, :), size(Y)) + A0_1(2,4);
+    z = reshape(cylin1(3, :), size(Z)) + A0_1(3,4);
+    
+    surf(handles,x, y, z);
+
+    cylin2 = A0_2(1:3,1:3) * [X(:)'; Y(:)'; Z(:)'];
+    x= reshape(cylin2(1, :), size(X)) + A0_2(1,4);
+    y = reshape(cylin2(2, :), size(Y)) + A0_2(2,4);
+    z = reshape(cylin2(3, :), size(Z)) + A0_2(3,4);
+    surf(handles,x, y, z);
+    
+    cylin3 = A0_3(1:3,1:3) * [X(:)'; Y(:)'; Z(:)'];
+    x= reshape(cylin3(1, :), size(X)) + A0_3(1,4);
+    y = reshape(cylin3(2, :), size(Y)) + A0_3(2,4);
+    z = reshape(cylin3(3, :), size(Z)) + A0_3(3,4);
+    surf(handles,x, y, z);
+    
+    
+
     quiver3(handles,PO(1,1),PO(2,1),PO(3,1),VX(1,1),VX(2,1),VX(3,1),'LineWidth',2,'Color','black')
     quiver3(handles,PO(1,1),PO(2,1),PO(3,1),VY(1,1),VY(2,1),VY(3,1),'LineWidth',2,'Color','cyan')
     quiver3(handles,PO(1,1),PO(2,1),PO(3,1),VZ(1,1),VZ(2,1),VZ(3,1),'LineWidth',2,'Color','green')
