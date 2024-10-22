@@ -65,8 +65,8 @@ function [P1,P2,P3,RPY1,RPY2,RPY3]=Forward_Kinatic(handles,theta1,theta2,theta3)
     surf(handles,x, y, z);
 
     [X_1,Y_1,Z_1]=cylinder(handles,0.2);
-    Z_1=Z_1*2
-    a=Homogeneous_Transition
+    Z_1=Z_1*2;
+    a=Homogeneous_Transition;
     R_cylider=a.Rot_y(pi/2);
 
     cylin2 = A0_2(1:3,1:3) * [X(:)'; Y(:)'; Z(:)'];
