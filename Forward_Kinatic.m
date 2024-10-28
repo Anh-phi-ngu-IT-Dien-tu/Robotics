@@ -1,4 +1,4 @@
-function [P1,P2,P3,RPY1,RPY2,RPY3]=Forward_Kinatic(handles,theta1,theta2,theta3)
+function [P1,P2,P3,RPY1,RPY2,RPY3]=Forward_Kinatic(handles,theta1,theta2,theta3,cylinderonoff)
 %% declare links constain
     d1=3;
     d2=0;
@@ -55,60 +55,62 @@ function [P1,P2,P3,RPY1,RPY2,RPY3]=Forward_Kinatic(handles,theta1,theta2,theta3)
     hold(handles,'on')
     grid(handles,'on')
     
-    [X,Y,Z]=cylinder(handles,0.2);
-    surf(handles,X,Y,Z*3);
-    fill3(handles,X(1,:),Y(1,:),Z(1,:)*3,'k','FaceAlpha',0.8,'EdgeAlpha',1);
-    fill3(handles,X(2,:),Y(2,:),Z(2,:)*3,'k','FaceAlpha',0.8,'EdgeAlpha',1);
+    if(cylinderonoff==1)
+        [X,Y,Z]=cylinder(handles,0.2);
+        surf(handles,X,Y,Z*3);
+        fill3(handles,X(1,:),Y(1,:),Z(1,:)*3,'k','FaceAlpha',0.8,'EdgeAlpha',1);
+        fill3(handles,X(2,:),Y(2,:),Z(2,:)*3,'k','FaceAlpha',0.8,'EdgeAlpha',1);
+        
+        Z=Z-0.5;
     
-    Z=Z-0.5;
-
-    cylin1 = A0_1(1:3,1:3) * [X(:)'; Y(:)'; Z(:)'];
-    x= reshape(cylin1(1, :), size(X)) + A0_1(1,4);
-    y = reshape(cylin1(2, :), size(Y)) + A0_1(2,4);
-    z = reshape(cylin1(3, :), size(Z)) + A0_1(3,4);
-    surf(handles,x, y, z);
-    fill3(handles,x(1,:),y(1,:),z(1,:),'k','FaceAlpha',0.8,'EdgeAlpha',1);
-    fill3(handles,x(2,:),y(2,:),z(2,:),'k','FaceAlpha',0.8,'EdgeAlpha',1);
+        cylin1 = A0_1(1:3,1:3) * [X(:)'; Y(:)'; Z(:)'];
+        x= reshape(cylin1(1, :), size(X)) + A0_1(1,4);
+        y = reshape(cylin1(2, :), size(Y)) + A0_1(2,4);
+        z = reshape(cylin1(3, :), size(Z)) + A0_1(3,4);
+        surf(handles,x, y, z);
+        fill3(handles,x(1,:),y(1,:),z(1,:),'k','FaceAlpha',0.8,'EdgeAlpha',1);
+        fill3(handles,x(2,:),y(2,:),z(2,:),'k','FaceAlpha',0.8,'EdgeAlpha',1);
+        
+        [X_1,Y_1,Z_1]=cylinder(handles,0.2);
+        Z_1=Z_1*2;
+        a=Homogeneous_Transition;
+        R_cylider=a.Rot_y(pi/2);
     
-    [X_1,Y_1,Z_1]=cylinder(handles,0.2);
-    Z_1=Z_1*2;
-    a=Homogeneous_Transition;
-    R_cylider=a.Rot_y(pi/2);
-
-    cylin2 = A0_2(1:3,1:3) * [X(:)'; Y(:)'; Z(:)'];
-    x= reshape(cylin2(1, :), size(X)) + A0_2(1,4);
-    y = reshape(cylin2(2, :), size(Y)) + A0_2(2,4);
-    z = reshape(cylin2(3, :), size(Z)) + A0_2(3,4);
-    surf(handles,x, y, z);
-    fill3(handles,x(1,:),y(1,:),z(1,:),'k','FaceAlpha',0.8,'EdgeAlpha',1);
-    fill3(handles,x(2,:),y(2,:),z(2,:),'k','FaceAlpha',0.8,'EdgeAlpha',1);
+        cylin2 = A0_2(1:3,1:3) * [X(:)'; Y(:)'; Z(:)'];
+        x= reshape(cylin2(1, :), size(X)) + A0_2(1,4);
+        y = reshape(cylin2(2, :), size(Y)) + A0_2(2,4);
+        z = reshape(cylin2(3, :), size(Z)) + A0_2(3,4);
+        surf(handles,x, y, z);
+        fill3(handles,x(1,:),y(1,:),z(1,:),'k','FaceAlpha',0.8,'EdgeAlpha',1);
+        fill3(handles,x(2,:),y(2,:),z(2,:),'k','FaceAlpha',0.8,'EdgeAlpha',1);
+        
+        cylin2k = A0_2(1:3,1:3)*R_cylider(1:3,1:3) * [X_1(:)'; Y_1(:)'; Z_1(:)'];
+        x_1= reshape(cylin2k(1, :), size(X_1)) + A0_2(1,4);
+        y_1 = reshape(cylin2k(2, :), size(Y_1)) + A0_2(2,4);
+        z_1 = reshape(cylin2k(3, :), size(Z_1)) + A0_2(3,4);
+        surf(handles,x_1, y_1, z_1);
+        fill3(handles,x_1(1,:),y_1(1,:),z_1(1,:),'k','FaceAlpha',0.8,'EdgeAlpha',1);
+        fill3(handles,x_1(2,:),y_1(2,:),z_1(2,:),'k','FaceAlpha',0.8,'EdgeAlpha',1);
     
-    cylin2k = A0_2(1:3,1:3)*R_cylider(1:3,1:3) * [X_1(:)'; Y_1(:)'; Z_1(:)'];
-    x_1= reshape(cylin2k(1, :), size(X_1)) + A0_2(1,4);
-    y_1 = reshape(cylin2k(2, :), size(Y_1)) + A0_2(2,4);
-    z_1 = reshape(cylin2k(3, :), size(Z_1)) + A0_2(3,4);
-    surf(handles,x_1, y_1, z_1);
-    fill3(handles,x_1(1,:),y_1(1,:),z_1(1,:),'k','FaceAlpha',0.8,'EdgeAlpha',1);
-    fill3(handles,x_1(2,:),y_1(2,:),z_1(2,:),'k','FaceAlpha',0.8,'EdgeAlpha',1);
-
-    %%
-    % cylin3 = A0_3(1:3,1:3) * [X(:)'; Y(:)'; Z(:)'];
-    % x= reshape(cylin3(1, :), size(X)) + A0_3(1,4);
-    % y = reshape(cylin3(2, :), size(Y)) + A0_3(2,4);
-    % z = reshape(cylin3(3, :), size(Z)) + A0_3(3,4);
-    % surf(handles,x, y, z);
-    % fill3(handles,x(1,:),y(1,:),z(1,:),'k','FaceAlpha',0.8,'EdgeAlpha',1);
-    % fill3(handles,x(2,:),y(2,:),z(2,:),'k','FaceAlpha',0.8,'EdgeAlpha',1);
-    %%
-
-    cylin3k = A0_3(1:3,1:3)*R_cylider(1:3,1:3) * [X_1(:)'; Y_1(:)'; Z_1(:)'];
-    x_1= reshape(cylin3k(1, :), size(X_1)) + A0_3(1,4);
-    y_1 = reshape(cylin3k(2, :), size(Y_1)) + A0_3(2,4);
-    z_1 = reshape(cylin3k(3, :), size(Z_1)) + A0_3(3,4);
-    surf(handles,x_1, y_1, z_1);
-    fill3(handles,x_1(1,:),y_1(1,:),z_1(1,:),'k','FaceAlpha',0.8,'EdgeAlpha',1);
-    fill3(handles,x_1(2,:),y_1(2,:),z_1(2,:),'k','FaceAlpha',0.8,'EdgeAlpha',1);
-
+        %%
+        % cylin3 = A0_3(1:3,1:3) * [X(:)'; Y(:)'; Z(:)'];
+        % x= reshape(cylin3(1, :), size(X)) + A0_3(1,4);
+        % y = reshape(cylin3(2, :), size(Y)) + A0_3(2,4);
+        % z = reshape(cylin3(3, :), size(Z)) + A0_3(3,4);
+        % surf(handles,x, y, z);
+        % fill3(handles,x(1,:),y(1,:),z(1,:),'k','FaceAlpha',0.8,'EdgeAlpha',1);
+        % fill3(handles,x(2,:),y(2,:),z(2,:),'k','FaceAlpha',0.8,'EdgeAlpha',1);
+        %%
+    
+        cylin3k = A0_3(1:3,1:3)*R_cylider(1:3,1:3) * [X_1(:)'; Y_1(:)'; Z_1(:)'];
+        x_1= reshape(cylin3k(1, :), size(X_1)) + A0_3(1,4);
+        y_1 = reshape(cylin3k(2, :), size(Y_1)) + A0_3(2,4);
+        z_1 = reshape(cylin3k(3, :), size(Z_1)) + A0_3(3,4);
+        surf(handles,x_1, y_1, z_1);
+        fill3(handles,x_1(1,:),y_1(1,:),z_1(1,:),'k','FaceAlpha',0.8,'EdgeAlpha',1);
+        fill3(handles,x_1(2,:),y_1(2,:),z_1(2,:),'k','FaceAlpha',0.8,'EdgeAlpha',1);
+    else
+    end
 
     quiver3(handles,PO(1,1),PO(2,1),PO(3,1),VX(1,1),VX(2,1),VX(3,1),'LineWidth',2,'Color','black')
     quiver3(handles,PO(1,1),PO(2,1),PO(3,1),VY(1,1),VY(2,1),VY(3,1),'LineWidth',2,'Color','cyan')
