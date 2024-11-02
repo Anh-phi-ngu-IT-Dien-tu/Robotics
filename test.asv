@@ -21,7 +21,7 @@ pxw=c1*(a2*c2+a3*c23);
 pwy=s1*(a2*c2+a3*c23);
 pwz=a2*s2+a3*s23+d1;
 
-(pxw^2+pwy^2+pwz^2)
+si
 
 
 
