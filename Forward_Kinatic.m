@@ -12,7 +12,7 @@ function [P1,P2,P3,RPY1,RPY2,RPY3]=Forward_Kinatic(handles,theta1,theta2,theta3,
     
     %% create links matrix(Denavit-Hartenberg matrix)
     PO=[0;0;0;1];
-    [A0_1,R0_1]=Add_Link(theta1,d1,a1,alpha1)
+    [A0_1,R0_1]=Add_Link(theta1,d1,a1,alpha1);
     [A1_2,R1_2]=Add_Link(theta2,d2,a2,alpha2);
     [A2_3,R2_3]=Add_Link(theta3,d3,a3,alpha3);
     
