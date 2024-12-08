@@ -43,7 +43,7 @@ function ve=Jacobian_Matrix(vtheta1,vtheta2,vtheta3,theta1,theta2,theta3)
 
     J=[j1_1 j1_2 j1_3;j2_1 j2_2 j2_3];
 
-    ve=J*[vtheta1;vtheta2;vtheta3]
+    ve=J*[vtheta1;vtheta2;vtheta3];
 
    
 
